@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { login } from "../auth/actions"
+import { signIn } from "../auth/actions"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -36,7 +36,7 @@ export default function LoginPage() {
     formData.append('email', values.email)
     formData.append('password', values.password)
     
-    const result = await login(formData)
+    const result = await signIn(formData)
     if (result?.error) {
       form.setError("root", { message: result.error })
     }
