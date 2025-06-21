@@ -2,8 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default async function AdminCompanyListPage() {
-  const supabase = createClient();
+export default async function AdminPage() {
+  const supabase = await createClient();
 
   const { data: companies, error } = await supabase
     .from('companies')

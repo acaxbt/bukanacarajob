@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const qrcodeRegionId = "html5qr-code-full-region";
 
 interface QrScannerProps {
-    onScanSuccess: (decodedText: string, decodedResult: any) => void;
+    onScanSuccess: (decodedText: string, decodedResult: unknown) => void;
     onScanFailure: (error: string) => void;
 }
 

@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-export default async function CompaniesPage() {
-  const supabase = createClient();
+export default async function CompanyListPage() {
+  const supabase = await createClient();
   const { data: companies, error } = await supabase
     .from("companies")
     .select(`id, name, logo_url, booth_location, sector`);

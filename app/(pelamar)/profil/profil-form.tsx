@@ -41,7 +41,20 @@ type Recommendation = {
     } | null;
 }
 
-export default function ProfileForm({ user, profile, recommendations }: { user: any, profile: any, recommendations: Recommendation[] }) {
+type User = {
+    id: string;
+    email?: string;
+}
+
+type Profile = {
+    nama?: string;
+    no_hp?: string;
+    pendidikan?: string;
+    pengalaman?: string;
+    cv_url?: string;
+}
+
+export default function ProfileForm({ user, profile, recommendations }: { user: User | null, profile: Profile | null, recommendations: Recommendation[] }) {
   const router = useRouter()
   const [feedback, setFeedback] = useState<{ type?: 'success' | 'error', message?: string }>({})
   const form = useForm<ProfileFormValues>({
@@ -107,10 +120,10 @@ export default function ProfileForm({ user, profile, recommendations }: { user: 
             </CardHeader>
             <CardContent>
                 <ul className="space-y-3">
-                    {recommendations.map((rec, index) => rec.jobs && (
+                    {recommendations.map((rec, index) => (
                         <li key={index} className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800 rounded-md">
-                           <span className="font-semibold">{rec.jobs.title}</span>
-                           <span className="text-sm text-gray-500 dark:text-gray-400">{rec.jobs.companies?.name}</span>
+                           <span className="font-semibold">{rec.jobs?.title || 'Unknown Job'}</span>
+                           <span className="text-sm text-gray-500 dark:text-gray-400">{rec.jobs?.companies?.name || 'Unknown Company'}</span>
                         </li>
                     ))}
                 </ul>
@@ -219,7 +232,7 @@ export default function ProfileForm({ user, profile, recommendations }: { user: 
                   <FormField
                       control={form.control}
                       name="cv"
-                      render={({ field: { onChange, value, ...rest } }) => (
+                      render={({ field: { onChange, ...rest } }) => (
                           <FormItem>
                               <FormLabel>Upload CV (PDF)</FormLabel>
                                <div className="relative flex items-center">

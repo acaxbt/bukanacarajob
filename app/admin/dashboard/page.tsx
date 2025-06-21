@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import QrScanner from "./QrScanner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -136,7 +136,7 @@ export default function AdminDashboardPage() {
                 onScanSuccess={(decodedText) => {
                   fetchUserData(decodedText);
                 }}
-                onScanFailure={(err) => {
+                onScanFailure={() => {
                   // Ignore "No QR code found" errors
                 }}
               />
