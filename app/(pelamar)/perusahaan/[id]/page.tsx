@@ -3,18 +3,14 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Building, MapPin, Phone } from 'lucide-react';
-import { Metadata } from "next";
 
-interface CompanyDetailPageProps {
-  params: { id: string }
-}
-
-export default async function CompanyDetailPage({ params }: CompanyDetailPageProps) {
+export default async function CompanyDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const supabase = await createClient();
   const { data: company, error } = await supabase
     .from("companies")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (error || !company) {

@@ -34,6 +34,17 @@ export default async function ProfilePage() {
     recommendationsPromise
   ]);
 
+  // Map jobs and companies to match expected type
+  const mappedRecommendations = (recommendations || []).map((rec: any) => ({
+    jobs: rec.jobs && !Array.isArray(rec.jobs)
+      ? {
+          ...rec.jobs,
+          companies: Array.isArray(rec.jobs.companies)
+            ? rec.jobs.companies[0] || null
+            : rec.jobs.companies || null,
+        }
+      : null,
+  }));
 
-  return <ProfileForm user={user} profile={profile} recommendations={recommendations || []} />
+  return <ProfileForm user={user} profile={profile} recommendations={mappedRecommendations} />
 } 
