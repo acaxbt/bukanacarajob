@@ -30,13 +30,8 @@ export default function RootLayout({
           }
           
           body {
-            color: rgb(var(--foreground-rgb));
-            background: linear-gradient(
-                to bottom,
-                transparent,
-                rgb(var(--background-end-rgb))
-              )
-              rgb(var(--background-start-rgb));
+            color: #171717;
+            background: #ffffff;
           }
           
           a {
@@ -48,12 +43,18 @@ export default function RootLayout({
             html {
               color-scheme: dark;
             }
+            body {
+              color: #ededed;
+              background: #0a0a0a;
+            }
           }
         `}</style>
       </head>
-      <body
-        className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
-      >
+      <body style={{
+        fontFamily: `${GeistSans.style.fontFamily}, system-ui, sans-serif`,
+        fontFeatureSettings: GeistSans.style.fontFeatureSettings,
+        fontVariationSettings: GeistSans.style.fontVariationSettings,
+      }}>
         {children}
       </body>
     </html>
