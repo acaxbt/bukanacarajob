@@ -2,6 +2,19 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import ProfileForm from './profil-form'
 
+type Company = {
+  name: string
+}
+
+type Job = {
+  title: string
+  companies: Company[]
+}
+
+type Recommendation = {
+  jobs: Job[]
+}
+
 export default async function ProfilePage() {
   const supabase = await createClient()
 
@@ -35,16 +48,18 @@ export default async function ProfilePage() {
   ]);
 
   // Map jobs and companies to match expected type
-  const mappedRecommendations = (recommendations || []).map((rec: any) => ({
-    jobs: rec.jobs && !Array.isArray(rec.jobs)
-      ? {
-          ...rec.jobs,
-          companies: Array.isArray(rec.jobs.companies)
-            ? rec.jobs.companies[0] || null
-            : rec.jobs.companies || null,
-        }
-      : null,
-  }));
+  const mappedRecommendations = (recommendations || []).map((rec: Recommendation) => {
+    const job = rec.jobs?.[0]
+    if (!job) {
+      return { jobs: null }
+    }
+    return {
+      jobs: {
+        title: job.title,
+        companies: job.companies?.[0] || null,
+      },
+    }
+  })
 
   return <ProfileForm user={user} profile={profile} recommendations={mappedRecommendations} />
 } 
