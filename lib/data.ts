@@ -74,6 +74,27 @@ export const findUserById = (id: string) => {
     return profiles.find(p => p.id === id);
 }
 
+export const createUser = (email: string) => {
+    // Check if user already exists
+    if (findUserByEmail(email)) {
+        return { success: false, error: "User already exists" };
+    }
+
+    // Create new user with default values
+    const newUser: Profile = {
+        id: `user-${Date.now()}`, // Simple ID generation
+        email,
+        nama: '',
+        no_hp: '',
+        pendidikan: '',
+        pengalaman: '',
+        cv_url: null,
+    };
+
+    profiles.push(newUser);
+    return { success: true, user: newUser };
+}
+
 export const getJobsByCompany = (companyId: string) => {
     return companies.find(c => c.id === companyId)?.jobs || [];
 }

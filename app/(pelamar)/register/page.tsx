@@ -1,97 +1,61 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { signup } from "../auth/actions"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Alamat email tidak valid." }),
-  password: z.string().min(1, { message: "Password tidak boleh kosong." }),
-})
-
 function RegisterForm() {
   const searchParams = useSearchParams()
   const message = searchParams.get('message')
-  
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  })
-
-  const onSubmit = async () => {
-    await signup()
-  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-md">
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh'
+    }}>
+      <Card style={{ width: '100%', maxWidth: '28rem' }}>
         <CardHeader>
           <CardTitle>Daftar Akun Baru</CardTitle>
           <CardDescription>Buat akun pelamar untuk melanjutkan.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {message && (
-                <div className="text-red-500 text-sm">
-                  {message}
-                </div>
-              )}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="email@contoh.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input type="password" placeholder="******" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Memproses...' : 'Daftar'}
-              </Button>
-              <div className="mt-4 text-center text-sm">
-                Sudah punya akun?{" "}
-                <Link href="/login" className="underline">
-                  Login
-                </Link>
+          <form action={signup} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            {message && (
+              <div style={{ color: '#ef4444', fontSize: '0.875rem' }}>
+                {message}
               </div>
-            </form>
-          </Form>
+            )}
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                Email
+              </label>
+              <Input name="email" type="email" placeholder="email@contoh.com" required />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                Password
+              </label>
+              <Input name="password" type="password" placeholder="******" required />
+              <small style={{ color: '#737373', fontSize: '0.75rem' }}>
+                Gunakan password: password123
+              </small>
+            </div>
+            <Button type="submit" style={{ width: '100%' }}>
+              Daftar
+            </Button>
+            <div style={{ marginTop: '1rem', textAlign: 'center', fontSize: '0.875rem' }}>
+              Sudah punya akun?{" "}
+              <Link href="/login" style={{ textDecoration: 'underline' }}>
+                Login
+              </Link>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>

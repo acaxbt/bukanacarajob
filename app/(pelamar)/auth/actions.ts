@@ -1,6 +1,6 @@
 'use server'
 
-import { findUserByEmail } from '@/lib/data'
+import { findUserByEmail, createUser } from '@/lib/data'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -32,9 +32,31 @@ export async function signIn(formData: FormData) {
   return redirect('/login?message=Invalid email or password')
 }
 
-export async function signup() {
-  // Signup is disabled in local mode.
-  return redirect('/register?message=Registration is disabled in local mode.')
+export async function signup(formData: FormData) {
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
+  if (!email || !password) {
+    return redirect('/register?message=Email and password are required')
+  }
+
+  // Create new user
+  const result = createUser(email)
+  
+  if (!result.success || !result.user) {
+    return redirect(`/register?message=${result.error || 'Registration failed'}`)
+  }
+
+  // Auto-login after successful registration
+  const cookieStore = await cookies()
+  cookieStore.set('user_id', result.user.id, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 24, // 1 day
+    path: '/',
+  })
+
+  return redirect('/profil?message=Registration successful! Please complete your profile.')
 }
 
 export async function logout() {
