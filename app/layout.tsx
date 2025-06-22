@@ -50,9 +50,7 @@ export default function RootLayout({
         `}</style>
       </head>
       <body style={{
-        fontFamily: `${GeistSans.style.fontFamily}, system-ui, sans-serif`,
-        fontFeatureSettings: GeistSans.style.fontFeatureSettings,
-        fontVariationSettings: GeistSans.style.fontVariationSettings,
+        fontFamily: `${GeistSans.style.fontFamily}, system-ui, sans-serif`
       }}>
         {children}
       </body>
