@@ -14,7 +14,7 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
       padding: '0.25rem 0.75rem',
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
-      transition: 'color 0.2s, box-shadow 0.2s, border-color 0.2s',
+      transition: 'color 0.2s, box-shadow 0.2s, border-color 0.2s, background-color 0.2s',
       outline: 'none',
     };
 

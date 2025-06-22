@@ -60,11 +60,26 @@ export default function RootLayout({
               color: #ffffff !important;
             }
             
-            /* Input fields in dark mode */
+            /* Input fields in dark mode - more specific */
             input, textarea, select {
               background-color: #1a1a1a !important;
               border-color: #333333 !important;
               color: #ffffff !important;
+            }
+            
+            /* Input placeholder text in dark mode */
+            input::placeholder, textarea::placeholder {
+              color: #9ca3af !important;
+              opacity: 1 !important;
+            }
+            
+            /* Input focus state in dark mode */
+            input:focus, textarea:focus, select:focus {
+              background-color: #1a1a1a !important;
+              border-color: #60a5fa !important;
+              color: #ffffff !important;
+              outline: none !important;
+              box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
             }
             
             /* Button text in dark mode */
@@ -79,6 +94,11 @@ export default function RootLayout({
             
             a:hover {
               color: #93c5fd !important;
+            }
+            
+            /* Small text and descriptions in dark mode */
+            small, .text-muted {
+              color: #9ca3af !important;
             }
           }
         `}</style>
