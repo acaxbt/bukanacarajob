@@ -1,19 +1,20 @@
 import * as React from "react"
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
-    const styles = {
-      borderRadius: '0.5rem',
-      border: '1px solid #e5e5e5',
-      backgroundColor: '#ffffff',
-      color: '#171717',
-      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+  ({ style, ...props }, ref) => {
+    const cardStyle: React.CSSProperties = {
+      borderRadius: '0.75rem',
+      border: '1px solid var(--card-border)',
+      backgroundColor: 'var(--card-background)',
+      color: 'var(--card-foreground)',
+      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)',
+      ...style,
     };
 
     return (
       <div
         ref={ref}
-        style={styles}
+        style={cardStyle}
         data-card="true"
         {...props}
       />
@@ -24,12 +25,13 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
+  ({ style, ...props }, ref) => {
     const styles = {
       display: 'flex',
       flexDirection: 'column' as const,
       gap: '0.5rem',
       padding: '1.5rem',
+      ...style,
     };
 
     return (
@@ -45,13 +47,13 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  (props, ref) => {
+  ({ style, ...props }, ref) => {
     const styles = {
-      fontSize: '1.125rem',
-      lineHeight: '1.75rem',
+      fontSize: '1.25rem',
       fontWeight: '600',
       letterSpacing: '-0.025em',
-      color: '#171717',
+      color: 'inherit',
+      ...style,
     };
 
     return (
@@ -67,11 +69,11 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTML
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  (props, ref) => {
+  ({ style, ...props }, ref) => {
     const styles = {
       fontSize: '0.875rem',
-      lineHeight: '1.25rem',
-      color: '#737373',
+      color: 'var(--muted-foreground)',
+      ...style,
     };
 
     return (
@@ -87,10 +89,11 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
 CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
+  ({ style, ...props }, ref) => {
     const styles = {
       padding: '1.5rem',
       paddingTop: '0',
+      ...style,
     };
 
     return (
@@ -106,12 +109,13 @@ const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDi
 CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
+  ({ style, ...props }, ref) => {
     const styles = {
       display: 'flex',
       alignItems: 'center',
       padding: '1.5rem',
       paddingTop: '0',
+      ...style,
     };
 
     return (

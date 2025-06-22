@@ -6,8 +6,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'default', size = 'default', ...props }, ref) => {
-    const baseStyles = {
+  ({ variant = 'default', size = 'default', style, ...props }, ref) => {
+    const baseStyles: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -18,74 +18,68 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fontWeight: '500',
       transition: 'all 0.2s',
       cursor: 'pointer',
-      border: 'none',
+      border: '1px solid transparent',
       outline: 'none',
     }
 
-    const variantStyles = {
+    const variantStyles: Record<NonNullable<ButtonProps['variant']>, React.CSSProperties> = {
       default: {
-        backgroundColor: '#171717',
-        color: '#ffffff',
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        backgroundColor: 'var(--primary)',
+        color: 'var(--primary-foreground)',
       },
       destructive: {
-        backgroundColor: '#ef4444',
-        color: '#ffffff',
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        backgroundColor: 'var(--destructive)',
+        color: 'var(--destructive-foreground)',
       },
       outline: {
-        border: '1px solid #e5e5e5',
-        backgroundColor: '#ffffff',
-        color: '#171717',
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        borderColor: 'var(--input-border)',
+        backgroundColor: 'transparent',
+        color: 'var(--foreground)',
       },
       secondary: {
-        backgroundColor: '#f5f5f5',
-        color: '#171717',
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        backgroundColor: 'var(--secondary)',
+        color: 'var(--secondary-foreground)',
       },
       ghost: {
         backgroundColor: 'transparent',
-        color: '#171717',
       },
       link: {
         backgroundColor: 'transparent',
-        color: '#171717',
+        color: 'var(--link)',
         textDecoration: 'underline',
       },
     }
 
-    const sizeStyles = {
+    const sizeStyles: Record<NonNullable<ButtonProps['size']>, React.CSSProperties> = {
       default: {
-        height: '2.25rem',
-        padding: '0.5rem 1rem',
+        height: '2.5rem',
+        padding: '0 1rem',
       },
       sm: {
-        height: '2rem',
-        borderRadius: '0.375rem',
-        padding: '0.375rem 0.75rem',
+        height: '2.25rem',
+        padding: '0 0.75rem',
       },
       lg: {
-        height: '2.5rem',
-        borderRadius: '0.375rem',
-        padding: '0.75rem 1.5rem',
+        height: '2.75rem',
+        padding: '0 1.25rem',
       },
       icon: {
-        width: '2.25rem',
-        height: '2.25rem',
+        height: '2.5rem',
+        width: '2.5rem',
       },
     }
 
-    const styles = {
+    const mergedStyles = {
       ...baseStyles,
       ...variantStyles[variant],
       ...sizeStyles[size],
+      ...style,
     }
 
     return (
       <button
         ref={ref}
-        style={styles}
+        style={mergedStyles}
         {...props}
       />
     )

@@ -15,10 +15,51 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <style>{`
+          :root {
+            --background: #ffffff;
+            --foreground: #171717;
+            --card: #ffffff;
+            --card-foreground: #171717;
+            --card-border: #e5e5e5;
+            --input-background: #ffffff;
+            --input-border: #e5e5e5;
+            --input-foreground: #171717;
+            --primary: #171717;
+            --primary-foreground: #fafafa;
+            --secondary: #f5f5f5;
+            --secondary-foreground: #171717;
+            --muted-foreground: #737373;
+            --destructive: #ef4444;
+            --ring: #60a5fa;
+            --link: #3b82f6;
+          }
+
+          @media (prefers-color-scheme: dark) {
+            :root {
+              --background: #0a0a0a;
+              --foreground: #f5f5f5;
+              --card: #1a1a1a;
+              --card-foreground: #f5f5f5;
+              --card-border: #262626;
+              --input-background: #262626;
+              --input-border: #404040;
+              --input-foreground: #f5f5f5;
+              --primary: #fafafa;
+              --primary-foreground: #171717;
+              --secondary: #262626;
+              --secondary-foreground: #fafafa;
+              --muted-foreground: #a3a3a3;
+              --destructive: #b91c1c;
+              --ring: #60a5fa;
+              --link: #60a5fa;
+            }
+          }
+        
           * {
             box-sizing: border-box;
             padding: 0;
             margin: 0;
+            border-color: var(--card-border);
           }
           
           html,
@@ -29,121 +70,22 @@ export default function RootLayout({
           }
           
           body {
-            color: #171717;
-            background: #ffffff;
+            color: var(--foreground);
+            background: var(--background);
+          }
+
+          h1, h2, h3, h4, h5, h6, p, span, div, label, small {
+            color: inherit;
           }
           
           a {
-            color: inherit;
+            color: var(--link);
             text-decoration: none;
+            transition: color 0.2s;
           }
-          
-          /* Dark theme styles */
-          @media (prefers-color-scheme: dark) {
-            html {
-              color-scheme: dark;
-            }
-            body {
-              color: #ffffff !important;
-              background: #0a0a0a !important;
-            }
-            
-            /* Ensure all text elements are visible in dark mode */
-            h1, h2, h3, h4, h5, h6, p, span, div, label, input, textarea, select {
-              color: #ffffff !important;
-            }
-            
-            /* Card backgrounds in dark mode */
-            .card, [data-card] {
-              background-color: #1a1a1a !important;
-              border-color: #333333 !important;
-              color: #ffffff !important;
-            }
-            
-            /* Input fields in dark mode - very specific */
-            input, textarea, select {
-              background-color: #1a1a1a !important;
-              border-color: #333333 !important;
-              color: #ffffff !important;
-            }
-            
-            /* Force input text color in dark mode */
-            input[type="text"], 
-            input[type="email"], 
-            input[type="password"], 
-            input[type="number"], 
-            input[type="tel"], 
-            input[type="url"], 
-            input[type="search"], 
-            input[type="date"], 
-            input[type="time"], 
-            input[type="datetime-local"], 
-            input[type="month"], 
-            input[type="week"], 
-            textarea, 
-            select {
-              background-color: #1a1a1a !important;
-              border-color: #333333 !important;
-              color: #ffffff !important;
-            }
-            
-            /* Even more specific selectors for input text */
-            body input,
-            body textarea,
-            body select,
-            div input,
-            div textarea,
-            div select,
-            form input,
-            form textarea,
-            form select {
-              background-color: #1a1a1a !important;
-              border-color: #333333 !important;
-              color: #ffffff !important;
-            }
-            
-            /* Force text color with maximum specificity */
-            html body input,
-            html body textarea,
-            html body select {
-              color: #ffffff !important;
-              background-color: #1a1a1a !important;
-              border-color: #333333 !important;
-            }
-            
-            /* Input placeholder text in dark mode */
-            input::placeholder, textarea::placeholder {
-              color: #9ca3af !important;
-              opacity: 1 !important;
-            }
-            
-            /* Input focus state in dark mode */
-            input:focus, textarea:focus, select:focus {
-              background-color: #1a1a1a !important;
-              border-color: #60a5fa !important;
-              color: #ffffff !important;
-              outline: none !important;
-              box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
-            }
-            
-            /* Button text in dark mode */
-            button {
-              color: #ffffff !important;
-            }
-            
-            /* Links in dark mode */
-            a {
-              color: #60a5fa !important;
-            }
-            
-            a:hover {
-              color: #93c5fd !important;
-            }
-            
-            /* Small text and descriptions in dark mode */
-            small, .text-muted {
-              color: #9ca3af !important;
-            }
+
+          a:hover {
+            opacity: 0.8;
           }
         `}</style>
       </head>
