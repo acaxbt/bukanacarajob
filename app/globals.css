@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-  --radius: 0.625rem;
   --background: #ffffff;
   --foreground: #171717;
   --card: #ffffff;
@@ -46,10 +45,8 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
