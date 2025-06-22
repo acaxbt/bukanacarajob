@@ -16,6 +16,7 @@ import { z } from "zod"
 import { signup } from "../auth/actions"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useSearchParams } from "next/navigation"
 
 const formSchema = z.object({
   email: z.string().email({ message: "Alamat email tidak valid." }),
@@ -23,6 +24,9 @@ const formSchema = z.object({
 })
 
 export default function RegisterPage() {
+  const searchParams = useSearchParams()
+  const message = searchParams.get('message')
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,14 +36,7 @@ export default function RegisterPage() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const formData = new FormData()
-    formData.append('email', values.email)
-    formData.append('password', values.password)
-    
-    const result = await signup(formData)
-    if (result?.error) {
-      form.setError("root", { message: result.error })
-    }
+    await signup()
   }
 
   return (
@@ -52,9 +49,9 @@ export default function RegisterPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {form.formState.errors.root && (
+              {message && (
                 <div className="text-red-500 text-sm">
-                  {form.formState.errors.root.message}
+                  {message}
                 </div>
               )}
               <FormField

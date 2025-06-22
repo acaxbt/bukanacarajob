@@ -16,6 +16,7 @@ import { z } from "zod"
 import { signIn } from "../auth/actions"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useSearchParams } from "next/navigation"
 
 const formSchema = z.object({
   email: z.string().email({ message: "Alamat email tidak valid." }),
@@ -23,6 +24,9 @@ const formSchema = z.object({
 })
 
 export default function LoginPage() {
+  const searchParams = useSearchParams()
+  const message = searchParams.get('message')
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,10 +40,7 @@ export default function LoginPage() {
     formData.append('email', values.email)
     formData.append('password', values.password)
     
-    const result = await signIn(formData)
-    if (result?.error) {
-      form.setError("root", { message: result.error })
-    }
+    await signIn(formData)
   }
 
   return (
@@ -52,9 +53,9 @@ export default function LoginPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {form.formState.errors.root && (
+              {message && (
                 <div className="text-red-500 text-sm">
-                  {form.formState.errors.root.message}
+                  {message}
                 </div>
               )}
               <FormField
