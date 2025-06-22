@@ -1,8 +1,8 @@
 import * as React from "react"
 
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  ({ type, ...props }, ref) => {
-    const styles = {
+  ({ type, style, ...props }, ref) => {
+    const baseStyles = {
       display: 'flex',
       height: '2.25rem',
       width: '100%',
@@ -18,11 +18,14 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
       outline: 'none',
     };
 
+    // Merge base styles with any additional styles passed as props
+    const mergedStyles = { ...baseStyles, ...style };
+
     return (
       <input
         type={type}
         ref={ref}
-        style={styles}
+        style={mergedStyles}
         {...props}
       />
     );

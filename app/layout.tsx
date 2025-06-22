@@ -60,11 +60,55 @@ export default function RootLayout({
               color: #ffffff !important;
             }
             
-            /* Input fields in dark mode - more specific */
+            /* Input fields in dark mode - very specific */
             input, textarea, select {
               background-color: #1a1a1a !important;
               border-color: #333333 !important;
               color: #ffffff !important;
+            }
+            
+            /* Force input text color in dark mode */
+            input[type="text"], 
+            input[type="email"], 
+            input[type="password"], 
+            input[type="number"], 
+            input[type="tel"], 
+            input[type="url"], 
+            input[type="search"], 
+            input[type="date"], 
+            input[type="time"], 
+            input[type="datetime-local"], 
+            input[type="month"], 
+            input[type="week"], 
+            textarea, 
+            select {
+              background-color: #1a1a1a !important;
+              border-color: #333333 !important;
+              color: #ffffff !important;
+            }
+            
+            /* Even more specific selectors for input text */
+            body input,
+            body textarea,
+            body select,
+            div input,
+            div textarea,
+            div select,
+            form input,
+            form textarea,
+            form select {
+              background-color: #1a1a1a !important;
+              border-color: #333333 !important;
+              color: #ffffff !important;
+            }
+            
+            /* Force text color with maximum specificity */
+            html body input,
+            html body textarea,
+            html body select {
+              color: #ffffff !important;
+              background-color: #1a1a1a !important;
+              border-color: #333333 !important;
             }
             
             /* Input placeholder text in dark mode */
