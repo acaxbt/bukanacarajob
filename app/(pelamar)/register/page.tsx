@@ -17,13 +17,14 @@ import { signup } from "../auth/actions"
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 const formSchema = z.object({
   email: z.string().email({ message: "Alamat email tidak valid." }),
   password: z.string().min(1, { message: "Password tidak boleh kosong." }),
 })
 
-export default function RegisterPage() {
+function RegisterForm() {
   const searchParams = useSearchParams()
   const message = searchParams.get('message')
   
@@ -94,5 +95,13 @@ export default function RegisterPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RegisterForm />
+    </Suspense>
   )
 } 
