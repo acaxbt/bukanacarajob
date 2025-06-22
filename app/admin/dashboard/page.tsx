@@ -11,9 +11,10 @@ const COMPANY_ID = 'company-a';
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: { scannedData: string };
+  searchParams: Promise<{ scannedData?: string }>;
 }) {
-  const scannedId = searchParams.scannedData;
+  const params = await searchParams;
+  const scannedId = params.scannedData;
   const scannedUser = scannedId ? profiles.find(p => p.id === scannedId) : null;
   const jobs = getJobsByCompany(COMPANY_ID);
 
