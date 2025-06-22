@@ -35,7 +35,7 @@ export default function RegisterPage() {
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async () => {
     await signup()
   }
 
