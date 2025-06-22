@@ -1,10 +1,14 @@
 'use server'
 
-import { findUserByEmail, createUser } from '@/lib/data'
+import { users, createUser } from '@/lib/data'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 const FAKE_PASSWORD = 'password123' // In a real app, do not do this!
+
+function findUserByEmail(email: string) {
+  return users.find(user => user.email === email)
+}
 
 export async function signIn(formData: FormData) {
   const email = formData.get('email') as string
@@ -41,7 +45,7 @@ export async function signup(formData: FormData) {
   }
 
   // Create new user
-  const result = createUser(email)
+  const result = createUser(formData)
   
   if (!result.success || !result.user) {
     return redirect(`/register?message=${result.error || 'Registration failed'}`)

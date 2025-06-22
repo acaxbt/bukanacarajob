@@ -1,31 +1,37 @@
 'use client'
 
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const qrcodeRegionId = "html5qr-code-full-region";
 
-const QrScanner = () => {
-    const router = useRouter();
+type QrScannerProps = {
+  onScan: (result: string) => void;
+};
+
+const QrScanner = ({ onScan }: QrScannerProps) => {
 
     useEffect(() => {
         let scanner: Html5QrcodeScanner | null = null;
 
         const onScanSuccess = (decodedText: string) => {
-            // On success, navigate to the dashboard with the scanned data as a query param
-            router.push(`/admin/dashboard?scannedData=${decodedText}`);
+            if (scanner) {
+                scanner.clear().catch(error => {
+                    console.error("Failed to clear html5-qrcode-scanner.", error);
+                });
+            }
+            onScan(decodedText);
         };
 
-        const onScanFailure = () => {
-            // For this app, we can ignore "no QR code found" errors.
+        const onScanFailure = (error: any) => {
+            // Kita bisa abaikan error "QR code not found"
             // console.warn(`Code scan error = ${error}`);
         };
-
-        // Ensure the element is in the DOM
+        
+        // Pastikan elemen ada di DOM
         const qrCodeElement = document.getElementById(qrcodeRegionId);
-        if (qrCodeElement && !scanner) {
-            scanner = new Html5QrcodeScanner(
+        if (qrCodeElement && !qrCodeElement.hasChildNodes()) {
+             scanner = new Html5QrcodeScanner(
                 qrcodeRegionId,
                 {
                     fps: 10,
@@ -41,13 +47,15 @@ const QrScanner = () => {
         }
 
         return () => {
-            scanner?.clear().catch(error => {
-                console.error("Failed to clear html5-qrcode-scanner.", error);
-            });
+            if (scanner) {
+                scanner.clear().catch(error => {
+                    console.error("Failed to clear html5-qrcode-scanner.", error);
+                });
+            }
         };
-    }, [router]);
+    }, [onScan]);
 
-    return <div id={qrcodeRegionId} />;
+    return <div id={qrcodeRegionId} style={{ width: '100%', maxWidth: '500px', margin: 'auto' }} />;
 };
 
 export default QrScanner; 

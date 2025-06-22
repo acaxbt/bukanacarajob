@@ -7,134 +7,158 @@ export type Company = {
 export type Job = {
   id: string;
   title: string;
+  description: string;
+  job_category: string;
 };
-
-export type Profile = {
-  id: string;
-  email: string;
-  nama: string;
-  no_hp: string;
-  pendidikan: string;
-  pengalaman: string;
-  cv_url: string | null;
-};
-
-export type Recommendation = {
-  userId: string;
-  jobId: string;
-};
-
-const jobsCompanyA: Job[] = [
-  { id: 'job-1', title: 'Frontend Developer' },
-  { id: 'job-2', title: 'Backend Developer' },
-];
-
-const jobsCompanyB: Job[] = [
-  { id: 'job-3', title: 'UI/UX Designer' },
-  { id: 'job-4', title: 'Product Manager' },
-];
 
 export const companies: Company[] = [
-    { id: 'company-a', name: 'PT Maju Mundur', jobs: jobsCompanyA },
-    { id: 'company-b', name: 'CV Pasti Jaya', jobs: jobsCompanyB },
-];
-
-export const profiles: Profile[] = [
-  {
-    id: 'user-1',
-    email: 'pelamar@example.com',
-    nama: 'Budi Pelamar',
-    no_hp: '081234567890',
-    pendidikan: 'S1 Teknik Informatika',
-    pengalaman: '2 tahun sebagai web developer',
-    cv_url: null,
-  },
-  {
-    id: 'user-2',
-    email: 'pelamar2@example.com',
-    nama: 'Siti Pelamarwati',
-    no_hp: '080987654321',
-    pendidikan: 'D3 Manajemen Informatika',
-    pengalaman: '1 tahun sebagai QA',
-    cv_url: null,
-  },
-];
-
-export const recommendations: Recommendation[] = [
-    // Rekomendasi awal bisa kosong
-];
-
-// --- Fungsi untuk berinteraksi dengan data ---
-
-export const findUserByEmail = (email: string) => {
-    return profiles.find(p => p.email === email);
-}
-
-export const findUserById = (id: string) => {
-    return profiles.find(p => p.id === id);
-}
-
-export const createUser = (email: string) => {
-    // Check if user already exists
-    if (findUserByEmail(email)) {
-        return { success: false, error: "User already exists" };
+    {
+        id: 'company-a',
+        name: 'Perusahaan A',
+        jobs: [
+            { id: 'job-a1', title: 'Frontend Developer', description: 'Membangun antarmuka pengguna yang responsif.', job_category: 'Teknik' },
+            { id: 'job-a2', title: 'Backend Developer', description: 'Mengelola logika sisi server dan database.', job_category: 'Teknik' },
+        ]
+    },
+    {
+        id: 'company-b',
+        name: 'Perusahaan B',
+        jobs: [
+            { id: 'job-b1', title: 'UI/UX Designer', description: 'Merancang pengalaman pengguna yang intuitif.', job_category: 'Desain' },
+        ]
     }
+];
 
-    // Create new user with default values
-    const newUser: Profile = {
-        id: `user-${Date.now()}`, // Simple ID generation
-        email,
-        nama: '',
-        no_hp: '',
-        pendidikan: '',
-        pengalaman: '',
-        cv_url: null,
-    };
-
-    profiles.push(newUser);
-    return { success: true, user: newUser };
-}
-
-export const getJobsByCompany = (companyId: string) => {
-    return companies.find(c => c.id === companyId)?.jobs || [];
-}
-
-export const getRecommendationsForUser = (userId: string) => {
-    const userRecommendations = recommendations.filter(r => r.userId === userId);
-    const recommendedJobs: { jobs: (Job & { companies: { name: string } | null }) | null }[] = [];
-
-    userRecommendations.forEach(rec => {
-        for (const company of companies) {
-            const job = company.jobs.find(j => j.id === rec.jobId);
-            if (job) {
-                recommendedJobs.push({
-                    jobs: {
-                        ...job,
-                        companies: { name: company.name }
-                    }
-                });
-                break;
-            }
+export const users = [
+    {
+        id: 'user-1',
+        email: 'user@nextmail.com',
+        password: 'password123',
+        profile: {
+            nama: 'Ahmad Subarjo',
+            no_hp: '081234567890',
+            pendidikan: 'S1 Teknik Informatika',
+            pengalaman: '5 tahun sebagai software engineer'
         }
-    });
+    },
+    {
+        id: 'user-2',
+        email: 'user2@nextmail.com',
+        password: 'password123',
+        profile: {
+            nama: 'Budi Santoso',
+            no_hp: '081234567891',
+            pendidikan: 'S1 Desain Grafis',
+            pengalaman: '3 tahun sebagai UI/UX Designer'
+        }
+    }
+];
 
+export const admins = [
+    {
+        id: 'admin-1',
+        email: 'admin@example.com',
+        password: 'admin123'
+    }
+];
+
+export const applicants = [
+    { id: 'app-1', user_id: 'user-1', job_id: 'job-a1', status: 'pending' as const },
+    { id: 'app-2', user_id: 'user-2', job_id: 'job-b1', status: 'approved' as const },
+];
+
+export const recommendations: { user_id: string, job_id: string }[] = [
+    { user_id: 'user-1', job_id: 'job-a2' }
+];
+
+export function getCompanyById(id: string) {
+    return companies.find(c => c.id === id);
+}
+
+export function getJobsByCompanyId(id: string) {
+    const company = getCompanyById(id);
+    return company ? company.jobs : [];
+}
+
+export function getApplicantsByCompany(companyId: string) {
+    const companyJobs = getJobsByCompanyId(companyId).map(j => j.id);
+    return applicants.filter(app => companyJobs.includes(app.job_id));
+}
+
+export function getUserById(id: string) {
+    const user = users.find(u => u.id === id);
+    if (user) {
+        return {
+            id: user.id,
+            email: user.email,
+            ...user.profile
+        };
+    }
+    return undefined;
+}
+
+export function getAdminByEmail(email: string) {
+    return admins.find(a => a.email === email);
+}
+
+export function getProfile(userId: string) {
+    const user = users.find(u => u.id === userId);
+    return user ? user.profile : null;
+}
+
+export function getRecommendationsForUser(userId: string) {
+    const recommendedJobIds = recommendations.filter(r => r.user_id === userId).map(r => r.job_id);
+    const recommendedJobs = companies.flatMap(c => c.jobs)
+        .filter(j => recommendedJobIds.includes(j.id))
+        .map(job => {
+            const company = companies.find(c => c.jobs.some(j => j.id === job.id));
+            return {
+                jobs: { ...job, companies: { name: company?.name || 'Unknown' } }
+            };
+        });
     return recommendedJobs;
 }
 
-export const addRecommendation = (userId: string, jobIds: string[]) => {
-    jobIds.forEach(jobId => {
-        recommendations.push({ userId, jobId });
-    });
-    // Di dunia nyata, ini akan error karena kita memutasi array. 
-    // Di lingkungan dev Next.js, ini akan "bekerja" per permintaan, tapi tidak permanen.
-    return { success: true };
-}
-
-export const updateUserProfile = (userId: string, data: Partial<Omit<Profile, 'id' | 'email' | 'cv_url'>>) => {
-    const profileIndex = profiles.findIndex(p => p.id === userId);
-    if (profileIndex !== -1) {
-        profiles[profileIndex] = { ...profiles[profileIndex], ...data };
-        return { success: true, profile: profiles[profileIndex] };
+export function updateProfile(userId: string, formData: FormData) {
+    const user = users.find(u => u.id === userId);
+    if (user) {
+        user.profile.nama = formData.get('nama') as string || user.profile.nama;
+        user.profile.no_hp = formData.get('no_hp') as string || user.profile.no_hp;
+        user.profile.pendidikan = formData.get('pendidikan') as string || user.profile.pendidikan;
+        user.profile.pengalaman = formData.get('pengalaman') as string || user.profile.pengalaman;
+        return { success: true };
     }
     return { success: false, error: "User not found" };
+}
+
+export function addRecommendation(userId: string, jobIds: string[]) {
+    jobIds.forEach(jobId => {
+        if (!recommendations.some(r => r.user_id === userId && r.job_id === jobId)) {
+            recommendations.push({ user_id: userId, job_id: jobId });
+        }
+    });
+}
+
+export function createUser(formData: FormData) {
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    if (users.find(u => u.email === email)) {
+        return { success: false, error: "User with this email already exists" };
+    }
+
+    const newUser = {
+        id: `user-${Date.now()}`,
+        email,
+        password,
+        profile: {
+            nama: email.split('@')[0],
+            no_hp: '',
+            pendidikan: '',
+            pengalaman: ''
+        }
+    };
+
+    users.push(newUser);
+    return { success: true, user: newUser };
 } 

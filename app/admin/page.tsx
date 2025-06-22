@@ -1,34 +1,49 @@
-import Link from "next/link";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { companies } from "@/lib/data";
+'use client'
 
-export default async function AdminPage() {
-  if (!companies || companies.length === 0) {
-    return <p className="text-center">Belum ada perusahaan yang terdaftar.</p>;
-  }
+import { loginAdmin } from "./actions"
+import { useSearchParams } from "next/navigation"
+import { Suspense } from 'react';
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
-        <div className="w-full max-w-2xl">
-            <div className="flex justify-center items-center mb-6">
-                <h1 className="text-2xl font-bold">Pilih Perusahaan untuk Dikelola</h1>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {companies.map((company) => {
-                    return (
-                    <Link href={`/admin/dashboard?companyId=${company.id}`} key={company.id}>
-                        <Card className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-4">
-                            <span>{company.name}</span>
-                            </CardTitle>
-                        </CardHeader>
-                        </Card>
-                    </Link>
-                    );
-                })}
-            </div>
+function AdminLoginForm() {
+    const searchParams = useSearchParams()
+    const message = searchParams.get('message')
+
+    return (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '80vh'
+        }}>
+            <article style={{ width: '100%', maxWidth: '450px' }}>
+                <header>
+                    <h2>Masuk sebagai Admin</h2>
+                </header>
+                <p>Gunakan akun admin untuk masuk ke dashboard.</p>
+                <form action={loginAdmin}>
+                    {message && (
+                        <p style={{ color: 'var(--pico-color-red-500)' }}>
+                            {message}
+                        </p>
+                    )}
+                    <label htmlFor="email">Email</label>
+                    <input name="email" id="email" type="email" placeholder="admin@contoh.com" defaultValue="admin@example.com" required />
+
+                    <label htmlFor="password">Password</label>
+                    <input name="password" id="password" type="password" placeholder="******" defaultValue="admin123" required />
+
+                    <button type="submit">Login</button>
+                </form>
+            </article>
         </div>
-    </div>
-  );
+    )
+}
+
+export default function AdminLoginPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <AdminLoginForm />
+        </Suspense>
+    )
 } 

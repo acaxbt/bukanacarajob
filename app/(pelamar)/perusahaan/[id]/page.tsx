@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
-import { Building, MapPin, Phone } from 'lucide-react';
 import { companies } from "@/lib/data";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default async function CompanyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -12,46 +12,53 @@ export default async function CompanyDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
-      <div className="flex flex-col md:flex-row items-start gap-8">
-        <div className="md:w-1/3 w-full flex flex-col items-center">
-            <h1 className="text-3xl font-bold text-center">{company.name}</h1>
-            <Badge variant="secondary" className="mt-2">Teknologi</Badge>
-        </div>
+    <>
+      <nav>
+        <ul>
+          <li>
+            <Link href="/perusahaan">
+              <ArrowLeft size={16} /> Kembali
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
-        <div className="md:w-2/3 w-full">
-          <div className="prose max-w-none">
-            <p>Perusahaan teknologi yang berfokus pada pengembangan aplikasi web dan mobile.</p>
+      <header style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <h1>{company.name}</h1>
+        <p>Perusahaan teknologi yang berfokus pada pengembangan aplikasi web dan mobile.</p>
+      </header>
+
+      <div className="grid">
+        <article>
+          <header>
+            <h4>Informasi Perusahaan</h4>
+          </header>
+          <ul>
+            <li><strong>Booth:</strong> A-12</li>
+            <li><strong>Lokasi:</strong> Jakarta, Indonesia</li>
+            <li><strong>Telepon:</strong> +62 21 1234 5678</li>
+          </ul>
+        </article>
+
+        <article>
+          <header>
+            <h4>Lowongan Tersedia</h4>
+          </header>
+          <div className="grid">
+            {company.jobs.map((job) => (
+              <article key={job.id}>
+                <header>
+                  <h5>{job.title}</h5>
+                </header>
+                <p>{job.description}</p>
+                <footer>
+                  <small>Kategori: {job.job_category}</small>
+                </footer>
+              </article>
+            ))}
           </div>
-          
-          <div className="mt-6 space-y-4">
-            <div className="flex items-center gap-2">
-              <Building className="h-5 w-5 text-gray-500" />
-              <span>Booth: A-12</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-gray-500" />
-              <span>Jakarta, Indonesia</span>
-            </div>
-             <div className="flex items-center gap-2">
-              <Phone className="h-5 w-5 text-gray-500" />
-              <span>+62 21 1234 5678</span>
-            </div>
-          </div>
-        </div>
+        </article>
       </div>
-      
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-4">Lowongan Tersedia</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {company.jobs.map((job) => (
-            <div key={job.id} className="p-4 border rounded-lg">
-              <h3 className="font-semibold text-lg">{job.title}</h3>
-              <p className="text-gray-600 mt-2">Lowongan untuk posisi {job.title.toLowerCase()} di {company.name}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    </>
   );
 } 
