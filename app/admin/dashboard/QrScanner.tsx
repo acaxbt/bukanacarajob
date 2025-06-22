@@ -17,7 +17,7 @@ const QrScanner = () => {
             router.push(`/admin/dashboard?scannedData=${decodedText}`);
         };
 
-        const onScanFailure = (error: string) => {
+        const onScanFailure = () => {
             // For this app, we can ignore "no QR code found" errors.
             // console.warn(`Code scan error = ${error}`);
         };

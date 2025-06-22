@@ -32,7 +32,7 @@ export async function signIn(formData: FormData) {
   return redirect('/login?message=Invalid email or password')
 }
 
-export async function signup(formData: FormData) {
+export async function signup() {
   // Signup is disabled in local mode.
   return redirect('/register?message=Registration is disabled in local mode.')
 }

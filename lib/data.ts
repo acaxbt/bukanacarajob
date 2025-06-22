@@ -60,7 +60,7 @@ export const profiles: Profile[] = [
   },
 ];
 
-export let recommendations: Recommendation[] = [
+export const recommendations: Recommendation[] = [
     // Rekomendasi awal bisa kosong
 ];
 

@@ -17,11 +17,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { updateProfile } from "./actions"
 import { logout } from "../auth/actions"
 import { useState } from "react"
-import Link from "next/link"
 import QRCode from "react-qr-code"
-import { useRouter } from "next/navigation"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Briefcase, CheckCircle2, FileText, GraduationCap, Phone, QrCode, UserCircle2, XCircle } from "lucide-react"
+import { Briefcase, CheckCircle2, GraduationCap, Phone, QrCode, UserCircle2, XCircle } from "lucide-react"
 
 const profileSchema = z.object({
   nama: z.string().min(1, { message: "Nama harus diisi." }),
@@ -54,7 +52,6 @@ type Profile = {
 }
 
 export default function ProfileForm({ user, profile, recommendations }: { user: User | null, profile: Profile | null, recommendations: Recommendation[] }) {
-  const router = useRouter()
   const [feedback, setFeedback] = useState<{ type?: 'success' | 'error', message?: string }>({})
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),

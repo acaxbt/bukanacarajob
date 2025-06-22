@@ -80,7 +80,7 @@ export default async function DashboardPage({
                 <CardTitle>Scan a QR Code</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Please scan an applicant's QR code to see their details and recommend jobs.</p>
+                <p>Please scan an applicant&apos;s QR code to see their details and recommend jobs.</p>
               </CardContent>
             </Card>
           )}
