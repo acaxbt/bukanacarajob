@@ -1,15 +1,6 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default async function HomePage() {
-  const cookieStore = await cookies();
-  const userId = cookieStore.get('user_id')?.value;
-
-  if (userId) {
-    redirect('/profil');
-  }
-
+export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 gap-4">
       <h1 className="text-4xl font-bold">Sistem Event</h1>
