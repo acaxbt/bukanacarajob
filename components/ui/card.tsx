@@ -14,6 +14,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
       <div
         ref={ref}
         style={styles}
+        data-card="true"
         {...props}
       />
     );
@@ -50,6 +51,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTML
       lineHeight: '1.75rem',
       fontWeight: '600',
       letterSpacing: '-0.025em',
+      color: '#171717',
     };
 
     return (

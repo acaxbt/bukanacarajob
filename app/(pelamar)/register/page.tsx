@@ -27,31 +27,62 @@ function RegisterForm() {
         <CardContent>
           <form action={signup} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {message && (
-              <div style={{ color: '#ef4444', fontSize: '0.875rem' }}>
+              <div style={{ 
+                color: '#ef4444', 
+                fontSize: '0.875rem',
+                padding: '0.75rem',
+                backgroundColor: '#fef2f2',
+                border: '1px solid #fecaca',
+                borderRadius: '0.375rem'
+              }}>
                 {message}
               </div>
             )}
             <div>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: '0.5rem', 
+                fontWeight: '500',
+                color: 'inherit'
+              }}>
                 Email
               </label>
               <Input name="email" type="email" placeholder="email@contoh.com" required />
             </div>
             <div>
-              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+              <label style={{ 
+                display: 'block', 
+                marginBottom: '0.5rem', 
+                fontWeight: '500',
+                color: 'inherit'
+              }}>
                 Password
               </label>
               <Input name="password" type="password" placeholder="******" required />
-              <small style={{ color: '#737373', fontSize: '0.75rem' }}>
+              <small style={{ 
+                color: 'inherit',
+                opacity: 0.7,
+                fontSize: '0.75rem',
+                marginTop: '0.25rem',
+                display: 'block'
+              }}>
                 Gunakan password: password123
               </small>
             </div>
             <Button type="submit" style={{ width: '100%' }}>
               Daftar
             </Button>
-            <div style={{ marginTop: '1rem', textAlign: 'center', fontSize: '0.875rem' }}>
+            <div style={{ 
+              marginTop: '1rem', 
+              textAlign: 'center', 
+              fontSize: '0.875rem',
+              color: 'inherit'
+            }}>
               Sudah punya akun?{" "}
-              <Link href="/login" style={{ textDecoration: 'underline' }}>
+              <Link href="/login" style={{ 
+                textDecoration: 'underline',
+                color: 'inherit'
+              }}>
                 Login
               </Link>
             </div>

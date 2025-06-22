@@ -25,7 +25,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantStyles = {
       default: {
         backgroundColor: '#171717',
-        color: '#fafafa',
+        color: '#ffffff',
         boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       },
       destructive: {

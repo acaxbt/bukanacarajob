@@ -9,11 +9,12 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
       minWidth: '0',
       borderRadius: '0.375rem',
       border: '1px solid #e5e5e5',
-      backgroundColor: 'transparent',
+      backgroundColor: '#ffffff',
+      color: '#171717',
       padding: '0.25rem 0.75rem',
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
-      transition: 'color 0.2s, box-shadow 0.2s',
+      transition: 'color 0.2s, box-shadow 0.2s, border-color 0.2s',
       outline: 'none',
     };
 
