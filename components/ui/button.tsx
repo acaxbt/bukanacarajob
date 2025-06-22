@@ -3,11 +3,10 @@ import * as React from "react"
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
   size?: 'default' | 'sm' | 'lg' | 'icon'
-  asChild?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', asChild = false, ...props }, ref) => {
+  ({ variant = 'default', size = 'default', ...props }, ref) => {
     const baseStyles = {
       display: 'inline-flex',
       alignItems: 'center',

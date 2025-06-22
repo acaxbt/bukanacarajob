@@ -1,11 +1,7 @@
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
-
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, ...props }, ref) => {
+const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
     const styles = {
       borderRadius: '0.5rem',
       border: '1px solid #e5e5e5',
@@ -26,8 +22,8 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
 
 Card.displayName = "Card";
 
-const CardHeader = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, ...props }, ref) => {
+const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
     const styles = {
       display: 'flex',
       flexDirection: 'column' as const,
@@ -47,8 +43,8 @@ const CardHeader = React.forwardRef<HTMLDivElement, CardProps>(
 
 CardHeader.displayName = "CardHeader";
 
-const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => {
+const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  (props, ref) => {
     const styles = {
       fontSize: '1.125rem',
       lineHeight: '1.75rem',
@@ -69,7 +65,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, ...props }, ref) => {
+  (props, ref) => {
     const styles = {
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
@@ -88,8 +84,8 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
 
 CardDescription.displayName = "CardDescription";
 
-const CardContent = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, ...props }, ref) => {
+const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
     const styles = {
       padding: '1.5rem',
       paddingTop: '0',
@@ -107,8 +103,8 @@ const CardContent = React.forwardRef<HTMLDivElement, CardProps>(
 
 CardContent.displayName = "CardContent";
 
-const CardFooter = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, ...props }, ref) => {
+const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => {
     const styles = {
       display: 'flex',
       alignItems: 'center',
