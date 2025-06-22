@@ -1,19 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { companies } from "@/lib/data";
 
 export default async function AdminPage() {
-  const supabase = await createClient();
-
-  const { data: companies, error } = await supabase
-    .from('companies')
-    .select('id, name, logo_url');
-
-  if (error) {
-    console.error("Error fetching companies:", error);
-    return <p className="text-center text-red-500">Gagal memuat data perusahaan.</p>;
-  }
-
   if (!companies || companies.length === 0) {
     return <p className="text-center">Belum ada perusahaan yang terdaftar.</p>;
   }
@@ -26,14 +15,11 @@ export default async function AdminPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {companies.map((company) => {
-                    if (!company) return null;
                     return (
                     <Link href={`/admin/dashboard?companyId=${company.id}`} key={company.id}>
                         <Card className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-4">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={company.logo_url || '/placeholder.svg'} alt="logo" className="h-10 w-10 rounded-full object-contain" />
                             <span>{company.name}</span>
                             </CardTitle>
                         </CardHeader>

@@ -1,21 +1,31 @@
 'use client'
 
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const qrcodeRegionId = "html5qr-code-full-region";
 
-interface QrScannerProps {
-    onScanSuccess: (decodedText: string, decodedResult: unknown) => void;
-    onScanFailure: (error: string) => void;
-}
-
-const QrScanner = ({ onScanSuccess, onScanFailure }: QrScannerProps) => {
-    const [scanner, setScanner] = useState<Html5QrcodeScanner | null>(null);
+const QrScanner = () => {
+    const router = useRouter();
 
     useEffect(() => {
-        if (!scanner) {
-            const qrScanner = new Html5QrcodeScanner(
+        let scanner: Html5QrcodeScanner | null = null;
+
+        const onScanSuccess = (decodedText: string) => {
+            // On success, navigate to the dashboard with the scanned data as a query param
+            router.push(`/admin/dashboard?scannedData=${decodedText}`);
+        };
+
+        const onScanFailure = (error: string) => {
+            // For this app, we can ignore "no QR code found" errors.
+            // console.warn(`Code scan error = ${error}`);
+        };
+
+        // Ensure the element is in the DOM
+        const qrCodeElement = document.getElementById(qrcodeRegionId);
+        if (qrCodeElement && !scanner) {
+            scanner = new Html5QrcodeScanner(
                 qrcodeRegionId,
                 {
                     fps: 10,
@@ -27,8 +37,7 @@ const QrScanner = ({ onScanSuccess, onScanFailure }: QrScannerProps) => {
                 },
                 false // verbose
             );
-            qrScanner.render(onScanSuccess, onScanFailure);
-            setScanner(qrScanner);
+            scanner.render(onScanSuccess, onScanFailure);
         }
 
         return () => {
@@ -36,7 +45,7 @@ const QrScanner = ({ onScanSuccess, onScanFailure }: QrScannerProps) => {
                 console.error("Failed to clear html5-qrcode-scanner.", error);
             });
         };
-    }, [onScanSuccess, onScanFailure, scanner]);
+    }, [router]);
 
     return <div id={qrcodeRegionId} />;
 };

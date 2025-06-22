@@ -15,10 +15,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { updateProfile } from "./actions"
+import { logout } from "../auth/actions"
 import { useState } from "react"
 import Link from "next/link"
 import QRCode from "react-qr-code"
-import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Briefcase, CheckCircle2, FileText, GraduationCap, Phone, QrCode, UserCircle2, XCircle } from "lucide-react"
@@ -28,7 +28,6 @@ const profileSchema = z.object({
   no_hp: z.string().min(1, { message: "No. HP harus diisi." }),
   pendidikan: z.string().min(1, { message: "Pendidikan terakhir harus diisi." }),
   pengalaman: z.string().min(1, { message: "Pengalaman harus diisi." }),
-  cv: z.any().optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileSchema>
@@ -51,7 +50,7 @@ type Profile = {
     no_hp?: string;
     pendidikan?: string;
     pengalaman?: string;
-    cv_url?: string;
+    cv_url?: string | null;
 }
 
 export default function ProfileForm({ user, profile, recommendations }: { user: User | null, profile: Profile | null, recommendations: Recommendation[] }) {
@@ -74,12 +73,6 @@ export default function ProfileForm({ user, profile, recommendations }: { user: 
     formData.append('no_hp', data.no_hp)
     formData.append('pendidikan', data.pendidikan)
     formData.append('pengalaman', data.pengalaman)
-    if (data.cv && data.cv[0]) {
-      formData.append('cv', data.cv[0])
-    }
-    if (profile?.cv_url) {
-        formData.append('current_cv_url', profile.cv_url)
-    }
 
     setFeedback({ type: undefined, message: 'Menyimpan...'})
     const result = await updateProfile(formData)
@@ -88,13 +81,6 @@ export default function ProfileForm({ user, profile, recommendations }: { user: 
     } else {
       setFeedback({ type: 'success', message: 'Profil berhasil diperbarui!' })
     }
-  }
-
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
   }
 
   return (
@@ -206,7 +192,7 @@ export default function ProfileForm({ user, profile, recommendations }: { user: 
                           <div className="relative flex items-center">
                               <GraduationCap className="absolute left-3 h-5 w-5 text-gray-400" />
                               <FormControl>
-                                  <Input placeholder="S1 Teknik Informatika" {...field} className="pl-10 h-12"/>
+                                  <Input placeholder="Contoh: S1 Teknik Informatika" {...field} className="pl-10 h-12"/>
                               </FormControl>
                           </div>
                           <FormMessage />
@@ -218,74 +204,47 @@ export default function ProfileForm({ user, profile, recommendations }: { user: 
                       name="pengalaman"
                       render={({ field }) => (
                       <FormItem>
-                          <FormLabel>Pengalaman Kerja</FormLabel>
-                           <div className="relative flex items-center">
+                          <FormLabel>Pengalaman</FormLabel>
+                          <div className="relative flex items-center">
                               <Briefcase className="absolute left-3 h-5 w-5 text-gray-400" />
                               <FormControl>
-                                  <Input placeholder="Software Engineer di PT. X" {...field} className="pl-10 h-12"/>
+                                  <Input placeholder="Contoh: 2 tahun sebagai..." {...field} className="pl-10 h-12"/>
                               </FormControl>
                           </div>
                           <FormMessage />
                       </FormItem>
                       )}
                   />
-                  <FormField
-                      control={form.control}
-                      name="cv"
-                      render={({ field: { onChange, ...rest } }) => (
-                          <FormItem>
-                              <FormLabel>Upload CV (PDF)</FormLabel>
-                               <div className="relative flex items-center">
-                                  <FileText className="absolute left-3 h-5 w-5 text-gray-400" />
-                                  <FormControl>
-                                      <Input 
-                                          type="file" 
-                                          accept=".pdf"
-                                          onChange={(e) => onChange(e.target.files)} 
-                                          {...rest}
-                                          className="pl-10 file:text-primary file:font-semibold h-12 flex items-center"
-                                      />
-                                  </FormControl>
-                              </div>
-                              <FormMessage />
-                          </FormItem>
-                      )}
-                  />
-
-                {profile?.cv_url && (
-                  <div className="text-sm text-center">
-                    <Link href={profile.cv_url} target="_blank" className="underline text-blue-600 hover:text-blue-800">
-                      Lihat CV yang sudah diunggah
-                    </Link>
-                  </div>
-                )}
-                
-                {feedback.message && (
-                  <Alert variant={feedback.type === 'error' ? 'destructive' : 'default'} className={feedback.type === 'success' ? 'border-green-500 text-green-700' : ''}>
-                      {feedback.type === 'error' 
-                      ? <XCircle className="h-4 w-4" /> 
-                      : <CheckCircle2 className={`h-4 w-4 ${feedback.type === 'success' ? 'text-green-700' : ''}`} />}
-                      <AlertTitle>{feedback.type === 'error' ? 'Gagal' : (feedback.type === 'success' ? 'Sukses' : 'Memproses')}</AlertTitle>
-                      <AlertDescription>
-                      {feedback.message}
-                      </AlertDescription>
-                  </Alert>
-                )}
-
-                <Button type="submit" className="w-full h-12" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
-                </Button>
+                  <Button type="submit" className="w-full h-12" disabled={form.formState.isSubmitting}>
+                      {form.formState.isSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
+                  </Button>
               </form>
             </Form>
+            {feedback.message && (
+              <Alert className={`mt-4 ${feedback.type === 'success' ? 'border-green-500 text-green-700' : 'border-red-500 text-red-700'}`}>
+                {feedback.type === 'success' ? <CheckCircle2 className="h-4 w-4"/> : <XCircle className="h-4 w-4"/>}
+                <AlertTitle>{feedback.type === 'success' ? 'Berhasil' : 'Gagal'}</AlertTitle>
+                <AlertDescription>
+                  {feedback.message}
+                </AlertDescription>
+              </Alert>
+            )}
           </CardContent>
         </Card>
 
-        {/* 5. Logout Button */}
-        <div className="flex justify-center pt-4">
-            <Button variant="destructive" onClick={handleLogout} className="w-full max-w-xs">Logout</Button>
-        </div>
+        {/* 5. Logout */}
+        <Card className="shadow-lg">
+            <CardHeader>
+                <CardTitle>Sesi</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form action={logout}>
+                    <Button type="submit" variant="destructive" className="w-full">Logout</Button>
+                </form>
+            </CardContent>
+        </Card>
 
       </div>
     </div>
-  );
+  )
 } 

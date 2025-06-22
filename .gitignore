@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local SSL certificates
+localhost.pem
+localhost-key.pem
+
+# Node modules
+node_modules/

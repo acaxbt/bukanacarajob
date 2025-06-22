@@ -1,6 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -9,18 +7,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { companies } from "@/lib/data";
 
 export default async function CompanyListPage() {
-  const supabase = await createClient();
-  const { data: companies, error } = await supabase
-    .from("companies")
-    .select(`id, name, logo_url, booth_location, sector`);
-
-  if (error) {
-    console.error("Error fetching companies:", error);
-    return <p className="text-center text-red-500">Gagal memuat data perusahaan.</p>;
-  }
-
   if (!companies || companies.length === 0) {
     return <p className="text-center">Belum ada perusahaan yang terdaftar.</p>;
   }
@@ -33,22 +22,13 @@ export default async function CompanyListPage() {
           <Link href={`/perusahaan/${company.id}`} key={company.id} className="block hover:shadow-lg transition-shadow duration-200 rounded-lg">
             <Card className="h-full flex flex-col">
               <CardHeader>
-                <div className="relative h-24 w-24 mx-auto mb-4">
-                  <Image
-                    src={company.logo_url || '/placeholder.svg'}
-                    alt={`${company.name} logo`}
-                    layout="fill"
-                    objectFit="contain"
-                    className="rounded-full"
-                  />
-                </div>
                 <CardTitle className="text-center">{company.name}</CardTitle>
                 <CardDescription className="text-center">
-                  Booth: {company.booth_location || 'N/A'}
+                  {company.jobs.length} lowongan tersedia
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow flex items-end justify-center">
-                <Badge variant="secondary">{company.sector || 'Umum'}</Badge>
+                <Badge variant="secondary">Teknologi</Badge>
               </CardContent>
             </Card>
           </Link>

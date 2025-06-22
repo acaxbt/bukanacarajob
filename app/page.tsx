@@ -1,12 +1,12 @@
-import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
 export default async function HomePage() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
+  const cookieStore = await cookies();
+  const userId = cookieStore.get('user_id')?.value;
 
-  if (data.user) {
+  if (userId) {
     redirect('/profil');
   }
 

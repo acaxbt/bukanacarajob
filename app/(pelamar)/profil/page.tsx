@@ -1,65 +1,29 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import ProfileForm from './profil-form'
-
-type Company = {
-  name: string
-}
-
-type Job = {
-  title: string
-  companies: Company[]
-}
-
-type Recommendation = {
-  jobs: Job[]
-}
+import { findUserById, getRecommendationsForUser } from "@/lib/data";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import ProfileForm from "./profil-form";
 
 export default async function ProfilePage() {
-  const supabase = await createClient()
+  const cookieStore = await cookies();
+  const userId = cookieStore.get('user_id')?.value;
 
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
+  if (!userId) {
+    redirect('/login');
   }
 
-  const profilePromise = supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single()
+  const user = findUserById(userId);
+  const recommendations = getRecommendationsForUser(userId);
 
-  const recommendationsPromise = supabase
-    .from('recommendations')
-    .select(`
-      jobs (
-        title,
-        companies (
-          name
-        )
-      )
-    `)
-    .eq('user_id', user.id);
+  if (!user) {
+    // This case might happen if the cookie is stale
+    redirect('/login?message=User not found, please log in again.');
+  }
 
-  const [{ data: profile }, { data: recommendations }] = await Promise.all([
-    profilePromise,
-    recommendationsPromise
-  ]);
+  // The user object from findUserById already contains the email
+  const userWithEmail = {
+    ...user,
+    email: user.email 
+  };
 
-  // Map jobs and companies to match expected type
-  const mappedRecommendations = (recommendations || []).map((rec: Recommendation) => {
-    const job = rec.jobs?.[0]
-    if (!job) {
-      return { jobs: null }
-    }
-    return {
-      jobs: {
-        title: job.title,
-        companies: job.companies?.[0] || null,
-      },
-    }
-  })
-
-  return <ProfileForm user={user} profile={profile} recommendations={mappedRecommendations} />
+  return <ProfileForm user={userWithEmail} profile={userWithEmail} recommendations={recommendations} />;
 } 

@@ -1,45 +1,44 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
+import { findUserByEmail } from '@/lib/data'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+const FAKE_PASSWORD = 'password123' // In a real app, do not do this!
+
 export async function signIn(formData: FormData) {
-  const supabase = await createClient()
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
+  if (!email || !password) {
+    return redirect('/login?message=Email and password are required')
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const user = findUserByEmail(email)
 
-  if (error) {
-    console.error('Supabase login error:', error.message);
-    return { error: 'Email atau password salah.' }
+  // NOTE: This is a highly insecure way to check passwords.
+  // This is for demonstration purposes only in a full-local setup.
+  if (user && password === FAKE_PASSWORD) {
+    const cookieStore = await cookies()
+    cookieStore.set('user_id', user.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24, // 1 day
+      path: '/',
+    })
+    return redirect('/profil')
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/profil')
+  return redirect('/login?message=Invalid email or password')
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient()
+  // Signup is disabled in local mode.
+  return redirect('/register?message=Registration is disabled in local mode.')
+}
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-
-  const { error } = await supabase.auth.signUp(data)
-
-  if (error) {
-    if (error.message.includes('User already registered')) {
-        return { error: 'Email ini sudah terdaftar.'}
-    }
-    return { error: 'Gagal membuat akun. Silakan coba lagi.' }
-  }
-
-  revalidatePath('/', 'layout')
-  redirect('/profil')
+export async function logout() {
+  const cookieStore = await cookies()
+  cookieStore.delete('user_id')
+  redirect('/login')
 } 
