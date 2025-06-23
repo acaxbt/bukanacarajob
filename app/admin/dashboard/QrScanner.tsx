@@ -23,7 +23,7 @@ const QrScanner = ({ onScan }: QrScannerProps) => {
             onScan(decodedText);
         };
 
-        const onScanFailure = (error: any) => {
+        const onScanFailure = (_error: unknown) => {
             // Kita bisa abaikan error "QR code not found"
             // console.warn(`Code scan error = ${error}`);
         };

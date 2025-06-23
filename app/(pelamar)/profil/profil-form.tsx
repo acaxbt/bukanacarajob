@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { updateProfile } from "./actions"
 import { logout } from "../auth/actions"
-import { Briefcase, QrCode, UserCircle2, Phone, GraduationCap } from "lucide-react"
+import { Briefcase, QrCode, UserCircle2 } from "lucide-react"
 import QRCode from "react-qr-code"
 
 const profileSchema = z.object({

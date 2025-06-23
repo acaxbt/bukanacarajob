@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation';
 import { getCompanyById, getApplicantsByCompany, getUserById, Job, Company } from '@/lib/data';
 import QrScanner from './QrScanner';
 import { User, Mail, CheckCircle, XCircle } from 'lucide-react';
-import Link from 'next/link';
 
 type Applicant = {
   id: string;
