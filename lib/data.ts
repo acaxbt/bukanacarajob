@@ -193,4 +193,18 @@ export function assignUserToJob(userId: string, jobId: string) {
         return { success: true };
     }
     return { success: false, error: 'User already assigned to this job' };
+}
+
+export function getAssignedJobsForUser(userId: string) {
+    // Ambil semua applicants untuk userId
+    const userApplicants = applicants.filter(a => a.user_id === userId);
+    return userApplicants.map(app => {
+        const company = companies.find(c => c.jobs.some(j => j.id === app.job_id));
+        const job = company?.jobs.find(j => j.id === app.job_id);
+        return job && company ? {
+            jobTitle: job.title,
+            companyName: company.name,
+            status: app.status
+        } : null;
+    }).filter(Boolean);
 } 

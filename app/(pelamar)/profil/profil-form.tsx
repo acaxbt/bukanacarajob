@@ -40,7 +40,7 @@ type Profile = {
   cv_url?: string | null;
 }
 
-export default function ProfileForm({ user, profile, recommendations }: { user: User | null, profile: Profile | null, recommendations: Recommendation[] }) {
+export default function ProfileForm({ user, profile, recommendations, assignedJobs }: { user: User | null, profile: Profile | null, recommendations: Recommendation[], assignedJobs?: { jobTitle: string, companyName: string, status: string }[] }) {
   const [feedback, setFeedback] = useState<{ type?: 'success' | 'error', message?: string }>({})
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -73,6 +73,21 @@ export default function ProfileForm({ user, profile, recommendations }: { user: 
       <h1 style={{ textAlign: 'center' }}>
         Halo, {profile?.nama || 'Pelamar'}!
       </h1>
+      {assignedJobs && assignedJobs.length > 0 && (
+        <article style={{ margin: '1rem 0', border: '1px solid #eee', borderRadius: 8, padding: 16 }}>
+          <header style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <Briefcase />
+            <h4>Pekerjaan yang Sudah Diassign</h4>
+          </header>
+          <ul>
+            {assignedJobs.map((job, idx) => (
+              <li key={idx}>
+                <strong>{job.jobTitle}</strong> di <em>{job.companyName}</em> <span style={{ color: '#888' }}>({job.status})</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      )}
       
       <div className="grid">
         {/* Kolom Kiri */}

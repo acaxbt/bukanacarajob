@@ -1,4 +1,4 @@
-import { getUserById, getRecommendationsForUser } from "@/lib/data";
+import { getUserById, getRecommendationsForUser, getAssignedJobsForUser } from "@/lib/data";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ProfileForm from "./profil-form";
@@ -13,6 +13,7 @@ export default async function ProfilePage() {
 
   const user = getUserById(userId);
   const recommendations = getRecommendationsForUser(userId);
+  const assignedJobs = getAssignedJobsForUser(userId);
 
   if (!user) {
     // This case might happen if the cookie is stale
@@ -25,5 +26,5 @@ export default async function ProfilePage() {
     email: user.email 
   };
 
-  return <ProfileForm user={userWithEmail} profile={userWithEmail} recommendations={recommendations} />;
+  return <ProfileForm user={userWithEmail} profile={userWithEmail} recommendations={recommendations} assignedJobs={assignedJobs} />;
 } 
