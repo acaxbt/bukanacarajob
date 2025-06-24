@@ -24,12 +24,13 @@ export async function loginAdmin(formData: FormData) {
     return redirect('/admin?message=Email atau password salah')
   }
 
-  cookies().set('session', admin.id, {
+  const cookieStore = cookies();
+  cookieStore.set('session', admin.id, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 24 * 7, // One week
     path: '/',
-  })
+  });
 
   return redirect('/admin/dashboard')
 } 
