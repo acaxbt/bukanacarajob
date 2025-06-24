@@ -3,7 +3,8 @@
 import { redirect } from 'next/navigation'
 
 export async function loginAdmin(formData: FormData) {
-  const res = await fetch('/api/admin/login', {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bukanacarajob.vercel.app';
+  const res = await fetch(`${baseUrl}/api/admin/login`, {
     method: 'POST',
     body: formData,
   });
