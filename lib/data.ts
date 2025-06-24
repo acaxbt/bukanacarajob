@@ -179,4 +179,18 @@ export function createUser(formData: FormData) {
 
     users.push(newUser);
     return { success: true, user: newUser };
+}
+
+export function getUnassignedUsers() {
+    // User yang belum ada di applicants
+    const assignedUserIds = new Set(applicants.map(a => a.user_id));
+    return users.filter(u => !assignedUserIds.has(u.id));
+}
+
+export function assignUserToJob(userId: string, jobId: string) {
+    if (!applicants.some(a => a.user_id === userId && a.job_id === jobId)) {
+        applicants.push({ id: `app-${Date.now()}`, user_id: userId, job_id: jobId, status: 'pending' });
+        return { success: true };
+    }
+    return { success: false, error: 'User already assigned to this job' };
 } 
