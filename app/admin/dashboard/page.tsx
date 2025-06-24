@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getCompanyById, getApplicantsByCompany, getUserById, Job, Company } from '@/lib/data';
+import { getCompanyById, getApplicantsByCompany, getUserById, Job, Company, companies } from '@/lib/data';
 import QrScanner from './QrScanner';
 import { User, Mail, CheckCircle, XCircle } from 'lucide-react';
 
@@ -26,8 +26,9 @@ type UserProfile = {
 
 function DashboardContent() {
   const searchParams = useSearchParams();
-  const companyId = searchParams.get('companyId') || 'company-a'; // Default ke company-a
-  const [company, setCompany] = useState<Company | null>(null);
+  const initialCompanyId = searchParams.get('companyId') || companies[0].id;
+  const [companyId, setCompanyId] = useState(initialCompanyId);
+  const [company, setCompany] = useState<Company | null>(getCompanyById(initialCompanyId));
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [verifiedUser, setVerifiedUser] = useState<{ profile: UserProfile, isApplicant: boolean } | null>(null);
   const [isScanning, setIsScanning] = useState(false);
@@ -76,7 +77,19 @@ function DashboardContent() {
   return (
     <>
       <header style={{ textAlign: 'center' }}>
-        <h1>Dashboard Admin: {company.name}</h1>
+        <h1>Dashboard Admin: {company.name || '-'}</h1>
+        <div style={{ margin: '1rem 0' }}>
+          <label htmlFor="company-select">Pilih Perusahaan: </label>
+          <select
+            id="company-select"
+            value={companyId}
+            onChange={e => setCompanyId(e.target.value)}
+          >
+            {companies.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
       </header>
       
       <div className="grid">
