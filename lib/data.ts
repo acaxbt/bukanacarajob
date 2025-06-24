@@ -18,6 +18,7 @@ export const companies: Company[] = [
         jobs: [
             { id: 'job-a1', title: 'Frontend Developer', description: 'Membangun antarmuka pengguna yang responsif.', job_category: 'Teknik' },
             { id: 'job-a2', title: 'Backend Developer', description: 'Mengelola logika sisi server dan database.', job_category: 'Teknik' },
+            { id: 'job-a3', title: 'QA Engineer', description: 'Menjamin kualitas aplikasi melalui pengujian.', job_category: 'Teknik' },
         ]
     },
     {
@@ -25,6 +26,23 @@ export const companies: Company[] = [
         name: 'Perusahaan B',
         jobs: [
             { id: 'job-b1', title: 'UI/UX Designer', description: 'Merancang pengalaman pengguna yang intuitif.', job_category: 'Desain' },
+            { id: 'job-b2', title: 'Graphic Designer', description: 'Membuat materi visual untuk promosi.', job_category: 'Desain' },
+        ]
+    },
+    {
+        id: 'company-c',
+        name: 'Perusahaan C',
+        jobs: [
+            { id: 'job-c1', title: 'Marketing Specialist', description: 'Mengelola strategi pemasaran dan kampanye.', job_category: 'Pemasaran' },
+            { id: 'job-c2', title: 'Content Writer', description: 'Menulis konten untuk blog dan media sosial.', job_category: 'Pemasaran' },
+        ]
+    },
+    {
+        id: 'company-d',
+        name: 'Perusahaan D',
+        jobs: [
+            { id: 'job-d1', title: 'HR Generalist', description: 'Mengelola administrasi dan proses HR.', job_category: 'SDM' },
+            { id: 'job-d2', title: 'Recruiter', description: 'Mencari dan merekrut kandidat terbaik.', job_category: 'SDM' },
         ]
     }
 ];
