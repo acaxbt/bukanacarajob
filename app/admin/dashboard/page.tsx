@@ -32,7 +32,6 @@ function DashboardContent() {
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [verifiedUser, setVerifiedUser] = useState<{ profile: UserProfile, isApplicant: boolean } | null>(null);
   const [isScanning, setIsScanning] = useState(false);
-  const [assignUserId, setAssignUserId] = useState('');
   const [assignJobId, setAssignJobId] = useState('');
   const [assignMessage, setAssignMessage] = useState<string | null>(null);
   const unassignedUsers = getUnassignedUsers();
@@ -69,11 +68,10 @@ function DashboardContent() {
 
   const handleAssign = (e: React.FormEvent) => {
     e.preventDefault();
-    if (assignUserId && assignJobId) {
-      const result = assignUserToJob(assignUserId, assignJobId);
+    if (verifiedUser && assignJobId) {
+      const result = assignUserToJob(verifiedUser.profile.id, assignJobId);
       if (result.success) {
         setAssignMessage('Pelamar berhasil diassign ke job!');
-        setAssignUserId('');
         setAssignJobId('');
         // Refresh applicants
         if (company) {
@@ -85,6 +83,7 @@ function DashboardContent() {
           });
           setApplicants(applicantsWithDetails);
         }
+        setVerifiedUser(null);
       } else {
         setAssignMessage(result.error || 'Gagal assign pelamar');
       }
@@ -148,26 +147,22 @@ function DashboardContent() {
               <p><Mail size={14} /> <strong>Email:</strong> {verifiedUser.profile.email}</p>
             </div>
           )}
-          <section style={{ marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
-            <h4>Assign Pelamar ke Job</h4>
-            <form onSubmit={handleAssign} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
-              <select value={assignUserId} onChange={e => setAssignUserId(e.target.value)} required>
-                <option value="">Pilih Pelamar</option>
-                {unassignedUsers.map(u => (
-                  <option key={u.id} value={u.id}>{u.profile.nama} ({u.email})</option>
-                ))}
-              </select>
-              <select value={assignJobId} onChange={e => setAssignJobId(e.target.value)} required disabled={!company}>
-                <option value="">Pilih Job</option>
-                {company?.jobs.map(j => (
-                  <option key={j.id} value={j.id}>{j.title}</option>
-                ))}
-              </select>
-              <button type="submit">Assign</button>
-            </form>
-            {assignMessage && <p style={{ color: 'green' }}>{assignMessage}</p>}
-            {unassignedUsers.length === 0 && <p>Tidak ada pelamar yang belum diassign.</p>}
-          </section>
+          {verifiedUser && (
+            <section style={{ marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+              <h4>Assign Pelamar ke Job</h4>
+              <form onSubmit={handleAssign} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <span><strong>{verifiedUser.profile.nama}</strong> ({verifiedUser.profile.email})</span>
+                <select value={assignJobId} onChange={e => setAssignJobId(e.target.value)} required disabled={!company}>
+                  <option value="">Pilih Job</option>
+                  {company?.jobs.map(j => (
+                    <option key={j.id} value={j.id}>{j.title}</option>
+                  ))}
+                </select>
+                <button type="submit">Assign</button>
+              </form>
+              {assignMessage && <p style={{ color: 'green' }}>{assignMessage}</p>}
+            </section>
+          )}
         </article>
 
         {/* Kolom Kanan */}
