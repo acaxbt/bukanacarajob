@@ -5,32 +5,15 @@ import { redirect } from 'next/navigation'
 import { getAdminByEmail } from '@/lib/data'
 
 export async function loginAdmin(formData: FormData) {
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-
-  if (!email || !password) {
-    return redirect('/admin?message=Email dan password harus diisi')
-  }
-
-  const admin = getAdminByEmail(email)
-
-  if (!admin) {
-    return redirect('/admin?message=Email atau password salah')
-  }
-
-  const isPasswordValid = password === admin.password
-
-  if (!isPasswordValid) {
-    return redirect('/admin?message=Email atau password salah')
-  }
-
-  const cookieStore = cookies();
-  cookieStore.set('session', admin.id, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 24 * 7, // One week
-    path: '/',
+  const res = await fetch('/api/admin/login', {
+    method: 'POST',
+    body: formData,
   });
 
-  return redirect('/admin/dashboard')
+  if (!res.ok) {
+    const data = await res.json();
+    return redirect(`/admin?message=${encodeURIComponent(data.error || 'Login gagal')}`);
+  }
+
+  return redirect('/admin/dashboard');
 } 
