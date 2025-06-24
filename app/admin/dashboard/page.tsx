@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getCompanyById, getApplicantsByCompany, getUserById, Job, Company, companies, getUnassignedUsers, assignUserToJob } from '@/lib/data';
+import { getCompanyById, getApplicantsByCompany, getUserById, Job, Company, companies, assignUserToJob } from '@/lib/data';
 import QrScanner from './QrScanner';
 import { User, Mail, CheckCircle, XCircle } from 'lucide-react';
 
