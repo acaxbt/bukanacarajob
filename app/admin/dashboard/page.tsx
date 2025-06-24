@@ -34,7 +34,6 @@ function DashboardContent() {
   const [isScanning, setIsScanning] = useState(false);
   const [assignJobId, setAssignJobId] = useState('');
   const [assignMessage, setAssignMessage] = useState<string | null>(null);
-  const unassignedUsers = getUnassignedUsers();
 
   useEffect(() => {
     if (companyId) {
