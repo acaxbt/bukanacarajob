@@ -28,7 +28,7 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const initialCompanyId = searchParams.get('companyId') || companies[0].id;
   const [companyId, setCompanyId] = useState(initialCompanyId);
-  const [company, setCompany] = useState<Company | null>(getCompanyById(initialCompanyId));
+  const [company, setCompany] = useState<Company | null>(getCompanyById(initialCompanyId) ?? null);
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [verifiedUser, setVerifiedUser] = useState<{ profile: UserProfile, isApplicant: boolean } | null>(null);
   const [isScanning, setIsScanning] = useState(false);
